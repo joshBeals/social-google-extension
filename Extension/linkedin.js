@@ -1,3 +1,4 @@
+alert('hello');
 var result = "";
 var completed = [];
         $('body').append("<div id='contact' style='background-color:white;opacity:.8;position:fixed; top:0px;left:0px; z-index:10000;width:25%;height:100%;'></div>");
