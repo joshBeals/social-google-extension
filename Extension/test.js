@@ -1,4 +1,4 @@
-import Test from './src/test2.js'; 
+import Test from './classes/test2.js'; 
     
 var CurrentUser;
 var ComPort;
