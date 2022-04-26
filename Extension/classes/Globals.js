@@ -34,7 +34,7 @@ class Globals {
     }
     
     rand(min, max) {
-        var seed = this._seed;
+        let seed = this._seed;
         min = min === undefined ? 0 : min;
         max = max === undefined ? 1 : max;
         this._seed = (seed * 9301 + 49297) % 233280;
@@ -42,16 +42,16 @@ class Globals {
     }
 
     numbers(config) {
-        var cfg = config || {};
-        var min = cfg.min || 0;
-        var max = cfg.max || 1;
-        var from = cfg.from || [];
-        var count = cfg.count || 8;
-        var decimals = cfg.decimals || 8;
-        var continuity = cfg.continuity || 1;
-        var dfactor = Math.pow(10, decimals) || 0;
-        var data = [];
-        var i, value;
+        let cfg = config || {};
+        let min = cfg.min || 0;
+        let max = cfg.max || 1;
+        let from = cfg.from || [];
+        let count = cfg.count || 8;
+        let decimals = cfg.decimals || 8;
+        let continuity = cfg.continuity || 1;
+        let dfactor = Math.pow(10, decimals) || 0;
+        let data = [];
+        let i, value;
 
         for (i = 0; i < count; ++i) {
             value = (from[i] || 0) + this.rand(min, max);
@@ -66,16 +66,16 @@ class Globals {
     }
 
     labels(config) {
-        var cfg = config || {};
-        var min = cfg.min || 0;
-        var max = cfg.max || 100;
-        var count = cfg.count || 8;
-        var step = (max - min) / count;
-        var decimals = cfg.decimals || 8;
-        var dfactor = Math.pow(10, decimals) || 0;
-        var prefix = cfg.prefix || '';
-        var values = [];
-        var i;
+        let cfg = config || {};
+        let min = cfg.min || 0;
+        let max = cfg.max || 100;
+        let count = cfg.count || 8;
+        let step = (max - min) / count;
+        let decimals = cfg.decimals || 8;
+        let dfactor = Math.pow(10, decimals) || 0;
+        let prefix = cfg.prefix || '';
+        let values = [];
+        let i;
 
         for (i = min; i < max; i += step) {
             values.push(prefix + Math.round(dfactor * i) / dfactor);
@@ -85,11 +85,11 @@ class Globals {
     }
 
     months(config) {
-        var cfg = config || {};
-        var count = cfg.count || 12;
-        var section = cfg.section;
-        var values = [];
-        var i, value;
+        let cfg = config || {};
+        let count = cfg.count || 12;
+        let section = cfg.section;
+        let values = [];
+        let i, value;
 
         for (i = 0; i < count; ++i) {
             value = this.MONTHS[Math.ceil(i) % 12];
@@ -104,8 +104,13 @@ class Globals {
     }
 
     transparentize(color, opacity) {
-        var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+        let alpha = opacity === undefined ? 0.5 : 1 - opacity;
         return Color(color).alpha(alpha).rgbString();
+    }
+
+    hashCode(str) {
+        return str.split('').reduce((prevHash, currVal) =>
+            (((prevHash << 5) - prevHash) + currVal.charCodeAt(0)) | 0, 0);
     }
 
     hello() {
