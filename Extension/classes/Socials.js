@@ -1,22 +1,8 @@
-import User from './User.js';
+import SocialActions from './SocialActions.js';
 
-class Socials extends User{
+class Socials extends SocialActions {
     constructor() {
-        this.ComPort;
-        this.CurrentUser;
-
-        this.LastUsername = "";
-        this.SharedData = null;
-        this.lastMsg;
-        this.UserTag = "._7UhW9";
-        this.StartStory = false;
-
-        this.msg_user = "";
-        this.tag_dict = {};
-        this.account_dict = {};
-        this.that = this;
-        this.image_src = "";
-        this.story_set = false;
+        super();
     }
 
     scrollTop(starter) {
@@ -32,105 +18,10 @@ class Socials extends User{
         this.ComPort = chrome.runtime.connect({
             name: "instafollow213index",
         });
-        this.ComPort.onMessage.addListener(OnMessageReceive);
+        this.ComPort.onMessage.addListener(this.OnMessageReceive);
     }
 
-    SendMessage(tag, msgTag, msg) {
-        let sendObj = {
-            Tag: tag,
-        };
-        sendObj[msgTag] = msg;
-        if (typeof ComPort != "undefined") {
-            ComPort.postMessage(sendObj);
-        }
-    }
 
-    OnStoryMedia(user) {
-        let userRow =
-            `
-            <tr>
-            <td><a href='https://www.instagram.com/` +
-            user.username +
-            `/' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
-            user.user_pic_url +
-            `'/></a></td>
-            <td class='align-mid-vertical text-instafollow-td'>` +
-            user.username +
-            `</td><td class='text-instafollow-td align-mid-vertical'>` +
-            user.full_name +
-            `(@` +
-            user.target +
-            `)</td>
-            </tr>
-            `;
-
-        let follow_block = $("#story-block");
-        let follow_table = $(follow_block).find("tbody");
-        $(follow_table).prepend(userRow);
-
-        let table_rows = $(follow_table).find("tr");
-        let num_rows = table_rows.length;
-        if (num_rows > DisplayFollowersNum) {
-            let start_delete = num_rows - (num_rows - DisplayFollowersNum);
-            $(table_rows).slice(start_delete).remove();
-        }
-    }
-
-    onFollowedUser(user, social) {
-        let userRow =
-            `
-            <tr>
-            <td><a href='` +
-            user.url +
-            `' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
-            user.img +
-            `'/></a></td>
-            <td class='align-mid-vertical text-instafollow-td'>` +
-            user.username +
-            `</td><td class='text-instafollow-td align-mid-vertical'>` +
-            user.username +
-            `</td>
-            </tr>
-            `;
-
-        let follow_block = $(`#follow-block-${social}`);
-        let follow_table = $(follow_block).find("tbody");
-        $(follow_table).prepend(userRow);
-
-        let table_rows = $(follow_table).find("tr");
-        let num_rows = table_rows.length;
-        if (num_rows > DisplayFollowersNum) {
-            let start_delete = num_rows - (num_rows - DisplayFollowersNum);
-            $(table_rows).slice(start_delete).remove();
-        }
-    }
-
-    OnUnfollowedUser(user) {
-        var userRow =
-            `
-            <tr>
-            <td><a href='https://www.instagram.com/` +
-                    user.username +
-                    `/' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
-                    user.user_pic_url +
-                    `'/></a></td>
-            <td class='align-mid-vertical text-instafollow-td'>` +
-                    user.username +
-                    `</td>
-            </tr>
-            `;
-
-        var unfollow_block = $("#unfollow-block");
-        var unfollow_table = $(unfollow_block).find("tbody");
-        $(unfollow_table).prepend(userRow);
-
-        var table_rows = $(unfollow_table).find("tr");
-        var num_rows = table_rows.length;
-        if (num_rows > DisplayFollowersNum) {
-            var start_delete = num_rows - (num_rows - DisplayFollowersNum);
-            $(table_rows).slice(start_delete).remove();
-        }
-    }
 
     OnMessageReceive(msg) {
         if (msg.Tag == "UserFollowComplete") {
@@ -295,34 +186,34 @@ class Socials extends User{
                 "<div class='alert alert-success alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Instoo has detected that the langauge at instagram.com is not set to English. Please follow these steps: <br>1) Click your profile picture in the top right corner, then click Profile. <br>2) Click Edit Profile.<br>3) Click Language at the very bottom of the page and select a new language.<br>4) Select English. It's in small gray text on the last line of the page to make it easy.</div>"
             );
         } else if (msg.Tag == "UserFollowCompleteTikTok") {
-            OnFollowedUserTikTok(msg.User, "tiktok");
+            OnFollowedUser(msg.User, "tiktok");
         } else if (msg.Tag == "UserFollowCompletefacebook") {
-            OnFollowedUserfacebook(msg.User, "facebook");
+            OnFollowedUser(msg.User, "facebook");
         } else if (msg.Tag == "UserFollowCompletePinterest") {
-            OnFollowedUserPinterest(msg.User, "pinterest");
+            OnFollowedUser(msg.User, "pinterest");
         } else if (msg.Tag == "UserFollowCompleteLinkedin") {
-            OnFollowedUserLinkedin(msg.User, "linkedin");
+            OnFollowedUser(msg.User, "linkedin");
         } else if (msg.Tag == "RefreshPage") {
             window.location.reload(true);
         } else if (msg.Tag == "UserFollowCompleteTwitter") {
-            OnFollowedUserTwitter(msg.User, "twitter");
+            OnFollowedUser(msg.User, "twitter");
         } else if (msg.Tag == "UserLikeCompleteTikTok") {
-            OnLikedMediaTikTok(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "UserLikeCompletefacebook") {
-            OnLikedMediafacebook(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "UserLikeCompletePinterest") {
-            OnLikedMediaPinterest(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "UserLikeCompleteLinkedin") {
-            OnLikedMediaLinkedin(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "UserLikeCompleteTinder") {
-            OnLikedMediaTinder(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "UserLikeCompleteTwitter") {
-            OnLikedMediaTwitter(msg.User);
+            OnLikedMedia(msg.User);
         } else if (msg.Tag == "DispatchFollowStatus") {
             UpdateFollowStatus(msg.AllUsers);
         } else if (msg.Tag == "SetPhoto") {
             $(".img-current-user").attr("src", msg.user.profile_pic_url);
-            CurrentUser = msg.user;
+            this.CurrentUser = msg.user;
 
             user_email = $("#email").attr("name");
             let user_plan = $("#plan").attr("name");
@@ -331,13 +222,13 @@ class Socials extends User{
                 "https://instoo.com/user/postInst",
                 {
                     email: user_email,
-                    username: CurrentUser.username,
+                    username: this.CurrentUser.username,
                 },
                 function (returnedData) {
                     if (
                         returnedData &&
                         returnedData.length > 1 &&
-                        CurrentUser.username != "nala_awoon" &&
+                        this.CurrentUser.username != "nala_awoon" &&
                         !user_email.includes("ikeda.group")
                     ) {
                         $("#trial").show();
@@ -463,21 +354,21 @@ class Socials extends User{
             let dat = {
                 followers: follow_count_num,
                 hour: d_num,
-                user_id: msg.followers.CurrentUser.user_id,
+                user_id: msg.followers.this.CurrentUser.user_id,
                 mode: mode,
             };
             if (follow_count_num > 10) {
                 let data = {
                     followers: follow_count_num,
                     hour: d_num,
-                    user_id: CurrentUser.user_id,
+                    user_id: this.CurrentUser.user_id,
                     mode: "instagram",
                 };
 
                 SendMessage("PostStats", "data", data);
             }
         } else if (msg.Tag == "SendUserHeader") {
-            SendMessage("GotUserHeader", "User", CurrentUser);
+            SendMessage("GotUserHeader", "User", this.CurrentUser);
         } else if (msg.Tag == "BackupCloud") {
             if (enable_get_followers) {
             }
@@ -537,7 +428,7 @@ class Socials extends User{
             logged_in = true;
             loadedAccounts = false;
 
-            SendMessage("RequestFollowStatus", "Num", DisplayFollowersNum);
+            SendMessage("RequestFollowStatus", "Num", this.DisplayFollowersNum);
             $("#overlay").hide();
             if (paid_sub) {
                 SendMessage("SetPaidMode", "paid", true);
@@ -590,7 +481,7 @@ class Socials extends User{
         } else if (msg.Tag == "ReceiveWhitelistStatus") {
             SetWhitelistStatus(msg.Status);
         } else if (msg.Tag == "UpdateMediaStatus") {
-            UpdateMediaStatus(msg.Status);
+            this.UpdateMediaStatus(msg.Status);
         } else if (msg.Tag == "Error" && msg.type == "FollowError") {
             $("#errors").html(
                 "<div class='alert alert-danger alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Follow Usage Limit Warning!</strong> The bot is slowing down on follows for 30 minutes. Log out at Instagram.com to delete your cookies. If this message persists, test Instagram.com to check if you have a 3 day block, and wait if you do. We recommend using the story viewer, since it has much higher limits. </div>"
@@ -613,6 +504,7 @@ class Socials extends User{
             );
         }
     }
+
 }
 
 export default Socials;
