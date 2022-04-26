@@ -48,17 +48,17 @@ class Socials {
             `
             <tr>
             <td><a href='https://www.instagram.com/` +
-                    user.username +
-                    `/' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
-                    user.user_pic_url +
-                    `'/></a></td>
+            user.username +
+            `/' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
+            user.user_pic_url +
+            `'/></a></td>
             <td class='align-mid-vertical text-instafollow-td'>` +
-                    user.username +
-                    `</td><td class='text-instafollow-td align-mid-vertical'>` +
-                    user.full_name +
-                    `(@` +
-                    user.target +
-                    `)</td>
+            user.username +
+            `</td><td class='text-instafollow-td align-mid-vertical'>` +
+            user.full_name +
+            `(@` +
+            user.target +
+            `)</td>
             </tr>
             `;
 
@@ -99,6 +99,33 @@ class Socials {
         let num_rows = table_rows.length;
         if (num_rows > DisplayFollowersNum) {
             let start_delete = num_rows - (num_rows - DisplayFollowersNum);
+            $(table_rows).slice(start_delete).remove();
+        }
+    }
+
+    OnUnfollowedUser(user) {
+        var userRow =
+            `
+            <tr>
+            <td><a href='https://www.instagram.com/` +
+                    user.username +
+                    `/' target='_blank'><img class='backup_picture img-rounded' width='64' height='64'    src='` +
+                    user.user_pic_url +
+                    `'/></a></td>
+            <td class='align-mid-vertical text-instafollow-td'>` +
+                    user.username +
+                    `</td>
+            </tr>
+            `;
+
+        var unfollow_block = $("#unfollow-block");
+        var unfollow_table = $(unfollow_block).find("tbody");
+        $(unfollow_table).prepend(userRow);
+
+        var table_rows = $(unfollow_table).find("tr");
+        var num_rows = table_rows.length;
+        if (num_rows > DisplayFollowersNum) {
+            var start_delete = num_rows - (num_rows - DisplayFollowersNum);
             $(table_rows).slice(start_delete).remove();
         }
     }

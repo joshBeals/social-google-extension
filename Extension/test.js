@@ -1,8 +1,9 @@
 // Import Classes
-import Test from './classes/test2.js'; 
+import User from './classes/User.js'; 
 import Socials from './classes/Socials.js'; 
 
 // Instantiate Classes
+const user = new User();
 const socials = new Socials();
 socials.CreateComPort();
 
@@ -19,7 +20,7 @@ window.chartColors = {
 window.dataLayer = window.dataLayer || [];
 
 
-socials.SendMessage("minFollowing", "minFollowing", 100);
+// socials.SendMessage("minFollowing", "minFollowing", 100);
 
 
 $(document).on('change', '#minPhoto', function(event) {
@@ -62,3 +63,4 @@ $(document).on('click', '#whitelist-user', function(event) {
     }
 
 });
+
