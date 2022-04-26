@@ -1,8 +1,12 @@
+import SocialEvents from '../models/SocialEvents.js';
 import Socials from '../models/Socials.js'; 
+import SocialActions from './socialActions.js';
 
 const socials = new Socials();
+const socialActions = new SocialActions();
+const socialEvents = new SocialEvents();
 
-function OnMessageReceive(msg) {
+export default function OnMessageReceive(msg) {
     if (msg.Tag == "UserFollowComplete") {
         socials.OnFollowedUser(msg.User);
     } else if (msg.Tag == "ReloadCharts") {
@@ -165,31 +169,31 @@ function OnMessageReceive(msg) {
             "<div class='alert alert-success alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Instoo has detected that the langauge at instagram.com is not set to English. Please follow these steps: <br>1) Click your profile picture in the top right corner, then click Profile. <br>2) Click Edit Profile.<br>3) Click Language at the very bottom of the page and select a new language.<br>4) Select English. It's in small gray text on the last line of the page to make it easy.</div>"
         );
     } else if (msg.Tag == "UserFollowCompleteTikTok") {
-        socials.OnFollowedUser(msg.User, "tiktok");
+        socialActions.OnFollowedUser(msg.User, "tiktok");
     } else if (msg.Tag == "UserFollowCompletefacebook") {
-        socials.OnFollowedUser(msg.User, "facebook");
+        socialActions.OnFollowedUser(msg.User, "facebook");
     } else if (msg.Tag == "UserFollowCompletePinterest") {
-        socials.OnFollowedUser(msg.User, "pinterest");
+        socialActions.OnFollowedUser(msg.User, "pinterest");
     } else if (msg.Tag == "UserFollowCompleteLinkedin") {
-        socials.OnFollowedUser(msg.User, "linkedin");
+        socialActions.OnFollowedUser(msg.User, "linkedin");
     } else if (msg.Tag == "RefreshPage") {
         window.location.reload(true);
     } else if (msg.Tag == "UserFollowCompleteTwitter") {
-        socials.OnFollowedUser(msg.User, "twitter");
+        socialActions.OnFollowedUser(msg.User, "twitter");
     } else if (msg.Tag == "UserLikeCompleteTikTok") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "UserLikeCompletefacebook") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "UserLikeCompletePinterest") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "UserLikeCompleteLinkedin") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "UserLikeCompleteTinder") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "UserLikeCompleteTwitter") {
-        socials.OnLikedMedia(msg.User);
+        socialActions.OnLikedMedia(msg.User);
     } else if (msg.Tag == "DispatchFollowStatus") {
-        socials.UpdateFollowStatus(msg.AllUsers);
+        socialActions.UpdateFollowStatus(msg.AllUsers);
     } else if (msg.Tag == "SetPhoto") {
         $(".img-current-user").attr("src", msg.user.profile_pic_url);
         socials.CurrentUser = msg.user;
@@ -211,9 +215,9 @@ function OnMessageReceive(msg) {
                     !user_email.includes("ikeda.group")
                 ) {
                     $("#trial").show();
-                    SetFollowValue(false);
-                    SetUnfollowValue(false);
-                    SetStoryValue(false);
+                    socialEvents.SetFollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
+                    socialEvents.SetStoryValue(false);
                     $("#set-story-check").prop("checked", false);
 
                     $("#set-follow-check").prop("checked", false);
@@ -229,7 +233,7 @@ function OnMessageReceive(msg) {
         let loaded = false;
         let obj = [];
 
-        SendMessage("loadLocal", "Database", "obj");
+        socials.SendMessage("loadLocal", "Database", "obj");
     } else if (msg.Tag == "RecentFollowers") {
         let recentFollowers = msg.ExtractedUsers;
         instooData = [];
@@ -253,16 +257,16 @@ function OnMessageReceive(msg) {
         $("#set-follow-check").prop("checked", false);
         $("#set-like-check").prop("checked", false);
 
-        SetStoryValue(false);
-        SetLikeValue(false);
-        SetFollowValue(false);
+        socialEvents.SetStoryValue(false);
+        socialEvents.SetLikeValue(false);
+        socialEvents.SetFollowValue(false);
     } else if (msg.Tag == "userData") {
         $("#follow_count").html(
             "followers: " + msg.User.edge_followed_by.count
         );
         follow_count_num = msg.User.edge_followed_by.count;
         if (follow_count_num < 1000) {
-            SendMessage("SetSpeed", "Num", 2);
+            socials.SendMessage("SetSpeed", "Num", 2);
 
             $("#fast").removeClass("active");
             $("#slow").removeClass("active");
@@ -270,7 +274,7 @@ function OnMessageReceive(msg) {
         }
 
         if (follow_count_num < 200) {
-            SendMessage("SetSpeed", "Num", 8);
+            socials.SendMessage("SetSpeed", "Num", 8);
 
             $("#fast").removeClass("active");
             $("#slow").addClass("active");
@@ -290,7 +294,7 @@ function OnMessageReceive(msg) {
         CollectJob.cursor_key = null;
         CollectJob.user = UserData;
         myCollectJob = CollectJob;
-        SendMessage("myCollectJob", "Job", CollectJob);
+        socials.SendMessage("myCollectJob", "Job", CollectJob);
     } else if (msg.Tag == "gotStats") {
         follow_count_num = parseInt(
             msg.followers.followers
@@ -314,7 +318,7 @@ function OnMessageReceive(msg) {
         let d = new Date();
         let currentHour = d.getHours();
         if (follow_count_num < 1000) {
-            SendMessage("SetSpeed", "Num", 2);
+            socials.SendMessage("SetSpeed", "Num", 2);
 
             $("#fast").removeClass("active");
             $("#slow").removeClass("active");
@@ -322,7 +326,7 @@ function OnMessageReceive(msg) {
         }
 
         if (follow_count_num < 200) {
-            SendMessage("SetSpeed", "Num", 3);
+            socials.SendMessage("SetSpeed", "Num", 3);
 
             $("#fast").removeClass("active");
             $("#slow").addClass("active");
@@ -344,17 +348,17 @@ function OnMessageReceive(msg) {
                 mode: "instagram",
             };
 
-            SendMessage("PostStats", "data", data);
+            socials.SendMessage("PostStats", "data", data);
         }
     } else if (msg.Tag == "SendUserHeader") {
-        SendMessage("GotUserHeader", "User", socials.CurrentUser);
+        socials.SendMessage("GotUserHeader", "User", socials.CurrentUser);
     } else if (msg.Tag == "BackupCloud") {
         if (enable_get_followers) {
         }
         if (true) {
         }
     } else if (msg.Tag == "StatusUpdate") {
-        UpdateStatus(msg.Status);
+        socialActions.UpdateStatus(msg.Status);
     } else if (msg.Tag == "SkipFollowStory") {
         $("#errors").html(
             "<div class='alert alert-success alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
@@ -365,7 +369,7 @@ function OnMessageReceive(msg) {
     } else if (msg.Tag == "GotDatabase") {
         GotDatabase(msg.Database);
     } else if (msg.Tag == "SendFollowers") {
-        UpdateFollowers(msg.Status);
+        socialActions.UpdateFollowers(msg.Status);
     } else if (msg.Tag == "blocked") {
         window.location.href = "https://instoo.com/pause";
 
@@ -373,19 +377,19 @@ function OnMessageReceive(msg) {
         $("#set-follow-check").prop("checked", false);
         $("#set-like-check").prop("checked", false);
 
-        SetStoryValue(false);
-        SetLikeValue(false);
-        SetFollowValue(false);
+        socialEvents.SetStoryValue(false);
+        socialEvents.SetLikeValue(false);
+        socialEvents.SetFollowValue(false);
     } else if (msg.Tag == "SendAccountsDict") {
-        UpdateAccountsDict(msg.Accounts);
+        socialActions.UpdateAccountsDict(msg.Accounts);
     } else if (msg.Tag == "SendTagsDict") {
-        UpdateTagsDict(msg.Hashtags);
+        socialActions.UpdateTagsDict(msg.Hashtags);
     } else if (msg.Tag == "UserUnfollowComplete") {
-        OnUnfollowedUser(msg.User);
+        socialActions.OnUnfollowedUser(msg.User);
     } else if (msg.Tag == "OnLikedMediaComplete") {
-        OnLikedMedia(msg.Media);
+        socialActions.OnLikedMedia(msg.Media);
     } else if (msg.Tag == "OnStoryMediaComplete") {
-        OnStoryMedia(msg.Media);
+        socialActions.OnStoryMedia(msg.Media);
     } else if (msg.Tag == "Pause") {
         $("#set-follow-check").prop("checked", false);
         $("#set-unfollow-check").prop("checked", false);
@@ -395,22 +399,22 @@ function OnMessageReceive(msg) {
 
         // OnStoryMedia(msg.Media);
     } else if (msg.Tag == "OnCommentedMediaComplete") {
-        OnCommentedMedia(msg.Media);
+        socialActions.OnCommentedMedia(msg.Media);
     } else if (msg.Tag == "Settings") {
-        SetSettings(msg.Settings);
+        socialActions.SetSettings(msg.Settings);
     } else if (msg.Tag == "AddedWhitelistUsers") {
-        ClearWhitelistTable();
-        AddedWhitelistUsers(msg.Users);
+        socialActions.ClearWhitelistTable();
+        socialActions.AddedWhitelistUsers(msg.Users);
     } else if (msg.Tag == "UpdatedWhitelistUsers") {
         AddedWhitelistUsers(msg.Users);
     } else if (msg.Tag == "UserLoggedIn") {
-        logged_in = true;
-        loadedAccounts = false;
+        socials.logged_in = true;
+        socials.loadedAccounts = false;
 
-        SendMessage("RequestFollowStatus", "Num", socials.DisplayFollowersNum);
+        socials.SendMessage("RequestFollowStatus", "Num", socials.DisplayFollowersNum);
         $("#overlay").hide();
         if (paid_sub) {
-            SendMessage("SetPaidMode", "paid", true);
+            socials.SendMessage("SetPaidMode", "paid", true);
             $(".sub-user").hide();
             $("#purchase").hide();
             $("#upgrade").hide();
@@ -435,11 +439,11 @@ function OnMessageReceive(msg) {
             $("#progress").attr("src", "img/icon.gif");
         }
     } else if (msg.Tag == "UserLoggedOut") {
-        logged_in = false;
-        loadedAccounts = false;
+        socials.logged_in = false;
+        socials.loadedAccounts = false;
         if (
-            !(mode == "twitter") &&
-            !(mode == "tiktok") &&
+            !(socials.mode == "twitter") &&
+            !(socials.mode == "tiktok") &&
             !$("#set-story-check").is(":checked") &&
             !$("#set-like-check").is(":checked") &&
             !$("#set-follow-check").is(":checked") &&
@@ -449,18 +453,18 @@ function OnMessageReceive(msg) {
             $("#overlay").show();
         }
         setTimeout(function () {
-            if (!logged_in) {
-                SendMessage("OpenInstagram", "Speed", 1);
+            if (!socials.logged_in) {
+                socials.SendMessage("OpenInstagram", "Speed", 1);
             }
         }, 10000);
     } else if (msg.Tag == "ReceiveFilteredFollowings") {
-        ProcessFilteredFollowings(msg.Users);
+        socialActions.ProcessFilteredFollowings(msg.Users);
     } else if (msg.Tag == "RankTargets") {
-        RankTargets(msg.recents);
+        socialActions.RankTargets(msg.recents);
     } else if (msg.Tag == "ReceiveWhitelistStatus") {
-        SetWhitelistStatus(msg.Status);
+        socialActions.SetWhitelistStatus(msg.Status);
     } else if (msg.Tag == "UpdateMediaStatus") {
-        socials.UpdateMediaStatus(msg.Status);
+        socialActions.UpdateMediaStatus(msg.Status);
     } else if (msg.Tag == "Error" && msg.type == "FollowError") {
         $("#errors").html(
             "<div class='alert alert-danger alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><strong>Follow Usage Limit Warning!</strong> The bot is slowing down on follows for 30 minutes. Log out at Instagram.com to delete your cookies. If socials message persists, test Instagram.com to check if you have a 3 day block, and wait if you do. We recommend using the story viewer, since it has much higher limits. </div>"

@@ -5818,10 +5818,6 @@ function SaveSettings() {
     day = dd;
 
     SendMessage("UpdateSettings", "Settings", settings);
-
-
-
-
 }
 
 function ResetSettings() {

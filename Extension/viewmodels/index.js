@@ -1,11 +1,15 @@
 // Import Classes
-import User from './models/User.js'; 
-import Socials from './models/Socials.js'; 
-import './controllers/onMessageReceived.js';
+import User from '../models/User.js'; 
+import Socials from '../models/Socials.js'; 
+import SocialEvents from '../models/SocialEvents.js'; 
+import SocialActions from './SocialActions.js'; 
+import OnMessageReceive from './onMessageReceived.js';
 
 // Instantiate Classes
 const user = new User();
 const socials = new Socials();
+const socialEvents = new SocialEvents();
+const socialActions = new SocialActions();
 
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
@@ -201,7 +205,7 @@ $(document).ready(function() {
 
     $("#userLogin").show();
   
-    socials.CreateComPort();
+    socials.CreateComPort(OnMessageReceive);
 
     $("#starttiktok").parent().removeClass("hide");
 
@@ -320,7 +324,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/tinder.html", function() {
 
-            dashboardMode = 3;
+            socials.dashboardMode = 3;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -596,9 +600,6 @@ $(document).ready(function() {
             $("#medium").click(function() {
                 var user_plan = $("#plan").attr("name");
 
-
-
-
                 socials.SendMessage("SetSpeedTinder", "Num", 2);
                 $("#medium").addClass('active');
                 $("#slow").removeClass('active');
@@ -628,18 +629,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -647,40 +648,39 @@ $(document).ready(function() {
 
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
-
+                socialActions.RemoveCollectJobUser(this);
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagTikTok(this);
+                socialActions.RemoveCollectJobTagTikTok(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -694,11 +694,11 @@ $(document).ready(function() {
 
             $("#set-unfollow-check").click(function() {
                 $("#set-follow-check").prop("checked", false);
-                SetFollowValue(false);
+                socialEvents.SetFollowValue(false);
 
-                SetUnfollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents. SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -729,7 +729,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/crm.html", function() {
 
-            dashboardMode = 6;
+            socials.dashboardMode = 6;
             $("#validateInstagramFollowers").click(function() {
 
                 socials.SendMessage("validateInstagramFollowers", "Num", "DisplayLikesNum");
@@ -786,8 +786,8 @@ $(document).ready(function() {
                 socials.SendMessage("UpdateInstagramData", "instagram_data", instagram_data);
                 socials.SendMessage("UpdateLinkedinData", "linkedin_data", linkedin_data);
             });
-            mode = "crm";
-            gotAnalytics = false;
+            this.mode = "crm";
+            this.gotAnalytics = false;
 
 
             socials.SendMessage("RequestMediaStatus", "Num", DisplayLikesNum);
@@ -805,7 +805,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/linkedin.html", function() {
 
-            dashboardMode = 5;
+            socials.dashboardMode = 5;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -1173,18 +1173,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -1197,40 +1197,40 @@ $(document).ready(function() {
             });
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagLinkedin(this);
+                socialActions.RemoveCollectJobTagLinkedin(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -1244,11 +1244,11 @@ $(document).ready(function() {
 
             $("#set-unfollow-check").click(function() {
                 $("#set-follow-check").prop("checked", false);
-                SetFollowValue(false);
+                socialEvents.SetFollowValue(false);
 
-                SetUnfollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -1282,7 +1282,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/tiktok.html", function() {
 
-            dashboardMode = 1;
+            socials.dashboardMode = 1;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -1298,7 +1298,7 @@ $(document).ready(function() {
 
             for (var index = 0; index < data2.length; index++) {
                 var obj = data2[index];
-                if (CurrentUser && obj.user_id == CurrentUser.user_id) {
+                if (social.CurrentUser && obj.user_id == social.CurrentUser.user_id) {
                     chart_data.push(
                         parseInt(obj.followers)
                     );
@@ -1632,18 +1632,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -1656,40 +1656,40 @@ $(document).ready(function() {
             });
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagTikTok(this);
+                socialActions.RemoveCollectJobTagTikTok(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -1739,7 +1739,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/facebook.html", function() {
 
-            dashboardMode = 7;
+            socials.dashboardMode = 7;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -2118,18 +2118,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -2142,40 +2142,40 @@ $(document).ready(function() {
             });
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagfacebook(this);
+                socialActions.RemoveCollectJobTagfacebook(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -2227,7 +2227,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/pinterest.html", function() {
 
-            dashboardMode = 6;
+            socials.dashboardMode = 6;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -2577,18 +2577,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -2597,40 +2597,40 @@ $(document).ready(function() {
 
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagPinterest(this);
+                socialActions.RemoveCollectJobTagPinterest(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -2683,7 +2683,7 @@ $(document).ready(function() {
         $(".content-wrapper").empty();
         $(".content-wrapper").load("views/twitter.html", function() {
 
-            dashboardMode = 2;
+            socials.dashboardMode = 2;
 
             var data2 = [];
             if ($("#data2").attr("name") && $("#data2").attr("name").length > 2) {
@@ -3034,18 +3034,18 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
 
@@ -3058,40 +3058,40 @@ $(document).ready(function() {
             });
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
 
 
                 if ($(this).is(':checked') != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents. SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
 
                 if ($(this).is(':checked')) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTagTwitter(this);
+                socialActions.RemoveCollectJobTagTwitter(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions. RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -3143,7 +3143,7 @@ $(document).ready(function() {
         $(".content-wrapper").load("views/home.html", function() {
 
 
-            dashboardMode = 0;
+            socials.dashboardMode = 0;
 
             $("#tiktoksettings").hide();
 
@@ -4292,11 +4292,11 @@ $(document).ready(function() {
             });
             $("#set-follow-check").click(function() {
                 $("#set-unfollow-check").prop("checked", false);
-                SetUnfollowValue(false);
-                SetFollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue(false);
+                socialEvents.SetFollowValue($(this).is(':checked'));
                 follow_val = $(this).is(':checked');
                 if (follow_val) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
@@ -4308,10 +4308,10 @@ $(document).ready(function() {
             });
             $("#set-like-check").click(function() {
 
-                SetLikeValue($(this).is(':checked'));
+                socialEvents.SetLikeValue($(this).is(':checked'));
                 like_val = $(this).is(':checked');
                 if (like_val) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
@@ -4325,7 +4325,7 @@ $(document).ready(function() {
 
 
             $("#set-story-check").click(function() {
-                SetStoryValue($(this).is(':checked'));
+                socialEvents.SetStoryValue($(this).is(':checked'));
                 like_val = $(this).is(':checked');
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
                     $("#progress").attr("src", "img/disk.gif");
@@ -4335,19 +4335,19 @@ $(document).ready(function() {
 
                 if (like_val != true) {
                     $("#set-like-check").prop("checked", false);
-                    SetLikeValue(false);
+                    socialEvents.SetLikeValue(false);
                     $("#set-follow-check").prop("checked", false);
-                    SetFollowValue(false);
+                    socialEvents.SetFollowValue(false);
 
                     $("#set-unfollow-check").prop("checked", false);
-                    SetUnfollowValue(false);
+                    socialEvents.SetUnfollowValue(false);
                     $("#set-comment-check").prop("checked", false);
-                    SetCommentValue(false);
+                    socialEvents.SetCommentValue(false);
                 }
 
             });
             $("#set-comment-check").click(function() {
-                SetCommentValue($(this).is(':checked'));
+                socialEvents.SetCommentValue($(this).is(':checked'));
                 comment_val = $(this).is(':checked');
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
                     $("#progress").attr("src", "img/disk.gif");
@@ -4355,20 +4355,20 @@ $(document).ready(function() {
                     $("#progress").attr("src", "img/icon.gif");
                 }
                 if (comment_val) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", status.StartLike);
                 }
 
             });
             $(document).on('click', '.remove-user-collect', function() {
-                RemoveCollectJobUser(this);
+                socialActions.RemoveCollectJobUser(this);
 
             });
             $(document).on('click', '.remove-tag-collect', function() {
-                RemoveCollectJobTag(this);
+                socialActions.RemoveCollectJobTag(this);
             });
             $(document).on('click', '.remove-location-collect', function() {
-                RemoveLocationJobTag(this);
+                socialActions.RemoveLocationJobTag(this);
             });
             $(document).on('click', '.remove-comment-collect', function() {
 
@@ -4388,12 +4388,12 @@ $(document).ready(function() {
 
             $("#set-unfollow-check").click(function() {
                 $("#set-follow-check").prop("checked", false);
-                SetFollowValue(false);
+                socialEvents.SetFollowValue(false);
 
-                SetUnfollowValue($(this).is(':checked'));
+                socialEvents.SetUnfollowValue($(this).is(':checked'));
                 unfollow_val = $(this).is(':checked');
                 if (unfollow_val) {
-                    SetStoryValue($(this).is(':checked'));
+                    socialEvents.SetStoryValue($(this).is(':checked'));
                     $("#set-story-check").prop("checked", true);
                 }
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
