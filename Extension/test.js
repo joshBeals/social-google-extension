@@ -1,6 +1,7 @@
 // Import Classes
-import User from './classes/User.js'; 
-import Socials from './classes/Socials.js'; 
+import User from './models/User.js'; 
+import Socials from './models/Socials.js'; 
+import './controllers/onMessageReceived.js';
 
 // Instantiate Classes
 const user = new User();
