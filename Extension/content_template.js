@@ -65,7 +65,7 @@ function CreateComPort() {
 function OnMessageReceive(msg){
 console.log(msg);
 
-f(msg.Tag == "LikeFollow"){
+if(msg.Tag == "LikeFollow"){
 
                      SendMessage("DoneLinkedinLike", "User",msg_data);
 
