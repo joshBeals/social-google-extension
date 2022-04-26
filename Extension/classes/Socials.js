@@ -1,4 +1,6 @@
-class Socials {
+import User from './User.js';
+
+class Socials extends User{
     constructor() {
         this.ComPort;
         this.CurrentUser;

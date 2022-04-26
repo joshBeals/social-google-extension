@@ -701,7 +701,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-tinder2").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/tinder.html", function() {
+        $(".content-wrapper").load("views/tinder.html", function() {
 
             dashboardMode = 3;
 
@@ -1110,7 +1110,7 @@ $(document).ready(function() {
     });
     $("#sidebar-home-crm").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/crm.html", function() {
+        $(".content-wrapper").load("views/crm.html", function() {
 
             dashboardMode = 6;
             $("#validateInstagramFollowers").click(function() {
@@ -1186,7 +1186,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-link2").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/linkedin.html", function() {
+        $(".content-wrapper").load("views/linkedin.html", function() {
 
             dashboardMode = 5;
 
@@ -1663,7 +1663,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-tiktok").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/tiktok.html", function() {
+        $(".content-wrapper").load("views/tiktok.html", function() {
 
             dashboardMode = 1;
 
@@ -2120,7 +2120,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-facebook").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/facebook.html", function() {
+        $(".content-wrapper").load("views/facebook.html", function() {
 
             dashboardMode = 7;
 
@@ -2608,7 +2608,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-pinterest").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/pinterest.html", function() {
+        $(".content-wrapper").load("views/pinterest.html", function() {
 
             dashboardMode = 6;
 
@@ -3064,7 +3064,7 @@ $(document).ready(function() {
 
     $("#sidebar-home-tw").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/twitter.html", function() {
+        $(".content-wrapper").load("views/twitter.html", function() {
 
             dashboardMode = 2;
 
@@ -3523,7 +3523,7 @@ $(document).ready(function() {
     });
     $("#sidebar-home").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/home.html", function() {
+        $(".content-wrapper").load("views/home.html", function() {
 
 
             dashboardMode = 0;
@@ -4844,7 +4844,7 @@ $(document).ready(function() {
 
     $("#sidebar-settings").click(function() {
         $(".content-wrapper").empty();
-        $(".content-wrapper").load("pages/settings.html", function() {
+        $(".content-wrapper").load("views/settings.html", function() {
             var followers_string = "";
             for (var kk = 0; kk < user_followers.length; kk++) {
                 followers_string += user_followers[kk] + ", ";
