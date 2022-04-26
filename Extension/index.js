@@ -1,4 +1,3 @@
-
 var CurrentUser;
 var ComPort;
 var follow_count_num = 0;
@@ -3735,9 +3734,9 @@ $(document).ready(function() {
 
 
             if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                $("#progress").attr("src", "disk.gif");
+                $("#progress").attr("src", "img/disk.gif");
             } else {
-                $("#progress").attr("src", "icon.gif");
+                $("#progress").attr("src", "img/icon.gif");
             }
 
             if (paid_sub) {
@@ -4684,9 +4683,9 @@ $(document).ready(function() {
                     $("#set-story-check").prop("checked", true);
                 }
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                    $("#progress").attr("src", "disk.gif");
+                    $("#progress").attr("src", "img/disk.gif");
                 } else {
-                    $("#progress").attr("src", "icon.gif");
+                    $("#progress").attr("src", "img/icon.gif");
                 }
 
             });
@@ -4700,9 +4699,9 @@ $(document).ready(function() {
                 }
 
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                    $("#progress").attr("src", "disk.gif");
+                    $("#progress").attr("src", "img/disk.gif");
                 } else {
-                    $("#progress").attr("src", "icon.gif");
+                    $("#progress").attr("src", "img/icon.gif");
                 }
 
             });
@@ -4712,9 +4711,9 @@ $(document).ready(function() {
                 SetStoryValue($(this).is(':checked'));
                 like_val = $(this).is(':checked');
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                    $("#progress").attr("src", "disk.gif");
+                    $("#progress").attr("src", "img/disk.gif");
                 } else {
-                    $("#progress").attr("src", "icon.gif");
+                    $("#progress").attr("src", "img/icon.gif");
                 }
 
                 if (like_val != true) {
@@ -4734,9 +4733,9 @@ $(document).ready(function() {
                 SetCommentValue($(this).is(':checked'));
                 comment_val = $(this).is(':checked');
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                    $("#progress").attr("src", "disk.gif");
+                    $("#progress").attr("src", "img/disk.gif");
                 } else {
-                    $("#progress").attr("src", "icon.gif");
+                    $("#progress").attr("src", "img/icon.gif");
                 }
                 if (comment_val) {
                     SetStoryValue($(this).is(':checked'));
@@ -4781,9 +4780,9 @@ $(document).ready(function() {
                     $("#set-story-check").prop("checked", true);
                 }
                 if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                    $("#progress").attr("src", "disk.gif");
+                    $("#progress").attr("src", "img/disk.gif");
                 } else {
-                    $("#progress").attr("src", "icon.gif");
+                    $("#progress").attr("src", "img/icon.gif");
                 }
 
             });
@@ -4793,9 +4792,9 @@ $(document).ready(function() {
 
 
             if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-                $("#progress").attr("src", "disk.gif");
+                $("#progress").attr("src", "img/disk.gif");
             } else {
-                $("#progress").attr("src", "icon.gif");
+                $("#progress").attr("src", "img/icon.gif");
             }
 
 
@@ -5667,9 +5666,9 @@ function OnMessageReceive(msg) {
         }
 
         if (comment_val == true || like_val == true || follow_val == true || unfollow_val == true) {
-            $("#progress").attr("src", "disk.gif");
+            $("#progress").attr("src", "img/disk.gif");
         } else {
-            $("#progress").attr("src", "icon.gif");
+            $("#progress").attr("src", "img/icon.gif");
         }
   
 
