@@ -264,8 +264,8 @@ export default function OnMessageReceive(msg) {
         $("#follow_count").html(
             "followers: " + msg.User.edge_followed_by.count
         );
-        follow_count_num = msg.User.edge_followed_by.count;
-        if (follow_count_num < 1000) {
+        socials.follow_count_num = msg.User.edge_followed_by.count;
+        if (socials.follow_count_num < 1000) {
             socials.SendMessage("SetSpeed", "Num", 2);
 
             $("#fast").removeClass("active");
@@ -273,7 +273,7 @@ export default function OnMessageReceive(msg) {
             $("#medium").addClass("active");
         }
 
-        if (follow_count_num < 200) {
+        if (socials.follow_count_num < 200) {
             socials.SendMessage("SetSpeed", "Num", 8);
 
             $("#fast").removeClass("active");
@@ -296,7 +296,7 @@ export default function OnMessageReceive(msg) {
         myCollectJob = CollectJob;
         socials.SendMessage("myCollectJob", "Job", CollectJob);
     } else if (msg.Tag == "gotStats") {
-        follow_count_num = parseInt(
+        socials.follow_count_num = parseInt(
             msg.followers.followers
                 .split(",")
                 .join("")
@@ -305,7 +305,7 @@ export default function OnMessageReceive(msg) {
                 .split(" ")
                 .join("")
         );
-        following_count_num = parseInt(
+        socials.following_count_num = parseInt(
             msg.followers.following
                 .split(",")
                 .join("")
@@ -317,7 +317,7 @@ export default function OnMessageReceive(msg) {
 
         let d = new Date();
         let currentHour = d.getHours();
-        if (follow_count_num < 1000) {
+        if (socials.follow_count_num < 1000) {
             socials.SendMessage("SetSpeed", "Num", 2);
 
             $("#fast").removeClass("active");
@@ -325,7 +325,7 @@ export default function OnMessageReceive(msg) {
             $("#medium").addClass("active");
         }
 
-        if (follow_count_num < 200) {
+        if (socials.follow_count_num < 200) {
             socials.SendMessage("SetSpeed", "Num", 3);
 
             $("#fast").removeClass("active");
@@ -335,14 +335,14 @@ export default function OnMessageReceive(msg) {
         let d_num = Date.parse(d);
         d_num = Math.floor(d_num / (1000 * 60 * 60));
         let dat = {
-            followers: follow_count_num,
+            followers: socials.follow_count_num,
             hour: d_num,
-            user_id: msg.followers.socials.CurrentUser.user_id,
+            user_id: msg.followers.CurrentUser.user_id,
             mode: mode,
         };
-        if (follow_count_num > 10) {
+        if (socials.follow_count_num > 10) {
             let data = {
-                followers: follow_count_num,
+                followers: socials.follow_count_num,
                 hour: d_num,
                 user_id: socials.CurrentUser.user_id,
                 mode: "instagram",
@@ -353,7 +353,7 @@ export default function OnMessageReceive(msg) {
     } else if (msg.Tag == "SendUserHeader") {
         socials.SendMessage("GotUserHeader", "User", socials.CurrentUser);
     } else if (msg.Tag == "BackupCloud") {
-        if (enable_get_followers) {
+        if (socials.enable_get_followers) {
         }
         if (true) {
         }
